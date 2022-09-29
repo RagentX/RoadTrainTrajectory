@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="RoadTrain.Interfaces.IAxle">
+    <Position X="3" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IAxle.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RoadTrain.Interfaces.IBody">
+    <Position X="8.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IBody.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RoadTrain.Interfaces.IRoadTrainParts">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IRoadTrainParts.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RoadTrain.Interfaces.IDrivingAxle">
+    <Position X="0.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IDrivingAxle.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RoadTrain.Interfaces.ISteeringAxle">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAIBACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ISteeringAxle.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RoadTrain.Interfaces.ITrailerAxle">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITrailerAxle.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RoadTrain.Interfaces.ITruck">
+    <Position X="7.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAIAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITruck.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RoadTrain.Interfaces.ITrailer">
+    <Position X="9.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Interfaces\ITrailer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
