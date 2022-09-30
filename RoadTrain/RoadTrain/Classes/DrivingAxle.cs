@@ -5,22 +5,9 @@ namespace RoadTrain.Classes
 {
     public class DrivingAxle : Axle, IDrivingAxle
     {
-        public DrivingAxle()
-        {
-            _width = 2200;
-            _angleRotation = 0;
-            _axelPosition = 1440 + 3600;
-        }
-        public DrivingAxle(double axelPosition)
-        {
-            _width = 2200;
-            _angleRotation = 0;
-            _axelPosition = axelPosition;
-        }
-
-        public DrivingAxle(double width,
-                           double angleRotation,
-                           double axelPosition)
+        public DrivingAxle(double width = 2200,
+                           double angleRotation = 0,
+                           double axelPosition = 1440 + 3600)
         {
             _width = width;
             _angleRotation = angleRotation;

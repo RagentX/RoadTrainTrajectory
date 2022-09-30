@@ -5,32 +5,38 @@ namespace RoadTrain.Classes
 {
     public class Truck : Body, ITruck
     {      
-        private SteeringAxle _steeringAxle;
-        private List<DrivingAxle> _drivingAxles;
+        private SteeringAxle? _steeringAxle;
+        private List<DrivingAxle>? _drivingAxles;
 
-        public Truck()
-        {
-            _width = 2550;
-            _lenght = 1440 + 3600 + 1080;
-            _angleRotation = 0;
-            _steeringAxle = new SteeringAxle(1440);
-            _drivingAxles = new List<DrivingAxle>
-            {
-                new DrivingAxle(1440 + 3600)
-            };
-        }
-        public Truck(double width,
-                     double lenght,
-                     double angleRotation,
-                     SteeringAxle steeringAxle,
-                     List<DrivingAxle> drivingAxles
+        public Truck(double width = 2550,
+                     double lenght = 1440 + 3600 + 1080,
+                     double angleRotation = 0,
+                     SteeringAxle? steeringAxle = default(SteeringAxle),
+                     List<DrivingAxle>? drivingAxles = default(List<DrivingAxle>)
                      )
         {
             _width = width;
             _lenght = lenght;
             _angleRotation = angleRotation;
-            _steeringAxle = steeringAxle;
-            _drivingAxles = drivingAxles;
+            if(steeringAxle == default(SteeringAxle))
+            {
+                _steeringAxle = new SteeringAxle(1800, angleRotation, 1440);
+            }
+            else
+            {
+                _steeringAxle = steeringAxle;
+            }
+            if(drivingAxles == default(List<DrivingAxle>))
+            {
+                _drivingAxles = new List<DrivingAxle>
+            {
+                new DrivingAxle(2200, angleRotation, 1440 + 3600)
+            };
+            }
+            else
+            {
+                _drivingAxles = drivingAxles;
+            }
         }
 
         public SteeringAxle SteeringAxle

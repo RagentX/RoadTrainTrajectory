@@ -5,28 +5,30 @@ namespace RoadTrain.Classes
 {
     public class Trailer : Body, ITrailer
     {
-        private List<TrailerAxle> _trailerAxles;
-        public Trailer()
-        {
-            _width = 2550;
-            _lenght = 13600;
-            _angleRotation = 0;
-            _trailerAxles = new List<TrailerAxle>(){
-            new TrailerAxle(13600 - 1600),
-            new TrailerAxle(13600 - 2600),
-            new TrailerAxle(13600 - 3600)
-            };
-
-        }
-        public Trailer(double width,
-                       double lenght,
-                       double angleRotation,
-                       List<TrailerAxle> trailerAxles)
+        private List<TrailerAxle>? _trailerAxles;
+        public Trailer(double width = 2550,
+                       double lenght = 13600,
+                       double angleRotation = 0,
+                       List<TrailerAxle>? trailerAxles = default(List<TrailerAxle>))
         {
             _width = width;
             _lenght = lenght;
             _angleRotation = angleRotation;
-            _trailerAxles = trailerAxles;
+            if (trailerAxles == default(List<TrailerAxle>))
+            {
+                _trailerAxles = new List<TrailerAxle>()
+                {
+                    new TrailerAxle(2200, angleRotation, 13600 - 1600),
+                    new TrailerAxle(2200, angleRotation, 13600 - 2600),
+                    new TrailerAxle(2200, angleRotation, 13600 - 3600)
+                };
+            }
+            else
+            {
+                _trailerAxles = trailerAxles;
+            }
+            
+            //_trailerAxles = trailerAxles;
         }
 
         public List<TrailerAxle> TrailerAxles

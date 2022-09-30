@@ -7,15 +7,10 @@ namespace RoadTrain.Classes
         protected double _width;
         protected double _angleRotation;
         protected double _ratio;
-        public RoadTrainParts()
-        {
-            _ratio = 30;
-            _angleRotation = 0;
-        }
-        public RoadTrainParts(double ratio)
+        public RoadTrainParts(double ratio = 30, double angleRotation = 0)
         {
             _ratio = ratio;
-            _angleRotation = 0;
+            _angleRotation = angleRotation;
         }
         public double Width 
         { 

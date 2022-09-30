@@ -11,37 +11,14 @@ namespace RoadTrain.Classes
         private double _ackermanAngle;
         private double _leverLength;
 
-        public SteeringAxle()
-        {
-            _width = 1800;
-            _angleRotation = 0;
-            _axelPosition = 1440;
-            _rightRotation = 0;
-            _leftRotation = 0;
-            _wheelRotation = 0;
-            _ackermanAngle = 1;
-            _leverLength = 150;
-        }
-        public SteeringAxle(double axelPosition)
-        {
-            _width = 1800;
-            _angleRotation = 0;
-            _axelPosition = axelPosition;
-            _rightRotation = 0;
-            _leftRotation = 0;
-            _wheelRotation = 0;
-            _ackermanAngle = 1;
-            _leverLength = 150;
-        }
-
-        public SteeringAxle(double width,
-                            double angleRotation,
-                            double axelPosition,
-                            double rightRotation, 
-                            double leftRotation,
-                            double wheelRotation,
-                            double ackermanAngle,
-                            double leverLength)
+        public SteeringAxle(double width = 1800,
+                            double angleRotation = 0,
+                            double axelPosition = 1440,
+                            double rightRotation = 0, 
+                            double leftRotation = 0,
+                            double wheelRotation = 0,
+                            double ackermanAngle = 1,
+                            double leverLength = 150)
         {
             _width = width;
             _angleRotation = angleRotation;
