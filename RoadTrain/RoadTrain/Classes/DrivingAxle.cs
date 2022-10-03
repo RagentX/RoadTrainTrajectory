@@ -7,11 +7,11 @@ namespace RoadTrain.Classes
     {
         public DrivingAxle(double width = 2200,
                            double angleRotation = 0,
-                           double axelPosition = 1440 + 3600)
+                           double axlePosition = 1440 + 3600)
         {
             _width = width;
-            _angleRotation = angleRotation;
-            _axelPosition = axelPosition;
+            AngleRotation = angleRotation;
+            _axlePosition = axlePosition;
         }
 
         public Point[] Coordinates()

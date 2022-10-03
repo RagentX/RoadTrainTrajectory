@@ -4,12 +4,12 @@ namespace RoadTrain.Classes
 {
     public class Axle : RoadTrainParts, IAxle
     {
-        protected double _axelPosition;
+        protected double _axlePosition;
 
-        public double AxelPosition
+        public double AxlePosition
         {
-            get { return _axelPosition; }
-            set { _axelPosition = value; }
+            get { return _axlePosition; }
+            set { _axlePosition = value; }
         }
     }
 }

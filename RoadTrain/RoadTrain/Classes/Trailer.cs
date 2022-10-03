@@ -6,6 +6,8 @@ namespace RoadTrain.Classes
     public class Trailer : Body, ITrailer
     {
         private List<TrailerAxle>? _trailerAxles;
+        private double _avgTrailerAxlesPosition;
+
         public Trailer(double width = 2550,
                        double lenght = 13600,
                        double angleRotation = 0,
@@ -13,7 +15,7 @@ namespace RoadTrain.Classes
         {
             _width = width;
             _lenght = lenght;
-            _angleRotation = angleRotation;
+            AngleRotation = angleRotation;
             if (trailerAxles == default(List<TrailerAxle>))
             {
                 _trailerAxles = new List<TrailerAxle>()
@@ -27,7 +29,12 @@ namespace RoadTrain.Classes
             {
                 _trailerAxles = trailerAxles;
             }
-            
+            double sumTrailerAxlesPosition = 0;
+            foreach (TrailerAxle trailerAxle in _trailerAxles)
+            {
+                sumTrailerAxlesPosition += trailerAxle.AxlePosition;
+            }
+            _avgTrailerAxlesPosition = sumTrailerAxlesPosition / _trailerAxles.Count;
             //_trailerAxles = trailerAxles;
         }
 
@@ -41,5 +48,10 @@ namespace RoadTrain.Classes
         {
             return new Point[2];
         } 
+
+        public double AvgTrailerAxlesPosition
+        {
+            get { return _avgTrailerAxlesPosition; }
+        }
     }
 }

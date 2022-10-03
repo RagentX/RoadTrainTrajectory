@@ -1,16 +1,15 @@
 ﻿using RoadTrain.Interfaces;
-
 namespace RoadTrain.Classes
 {
     public class RoadTrainParts : IRoadTrainParts
     {
         protected double _width;
         protected double _angleRotation;
-        protected double _ratio;
-        public RoadTrainParts(double ratio = 30, double angleRotation = 0)
+        protected double _sinAngleRotation;
+        protected double _cosAngleRotation;
+        public RoadTrainParts(double angleRotation = 0)
         {
-            _ratio = ratio;
-            _angleRotation = angleRotation;
+            AngleRotation = angleRotation;
         }
         public double Width 
         { 
@@ -20,12 +19,12 @@ namespace RoadTrain.Classes
         public double AngleRotation
         { 
             get { return _angleRotation; }
-            set { _angleRotation = value; } 
-        }
-        public double Ratio
-        {
-            get { return _ratio; }
-            set { _ratio = value; }
+            set 
+            {
+                _sinAngleRotation = Math.Sin(value);
+                _cosAngleRotation = Math.Cos(value);
+                _angleRotation = value; 
+            } 
         }
     }
 }

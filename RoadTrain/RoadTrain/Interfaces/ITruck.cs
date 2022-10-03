@@ -7,6 +7,10 @@ namespace RoadTrain.Interfaces
     {
         SteeringAxle SteeringAxle { get; set; }
         List<DrivingAxle> DrivingAxles { get; set; }
-        Point[] Coordinates();
+        double AvgDrivingAxlesPosition { get; }
+        (double X, double Y)[] Coordinates { get;}
+        (double X, double Y) SteeringAxleCoordinates { get; }
+        (double X, double Y)[] DrivingAxlesCoordinates { get; }
+
     }
 }

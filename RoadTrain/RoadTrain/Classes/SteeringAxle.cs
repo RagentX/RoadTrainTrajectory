@@ -13,7 +13,7 @@ namespace RoadTrain.Classes
 
         public SteeringAxle(double width = 1800,
                             double angleRotation = 0,
-                            double axelPosition = 1440,
+                            double axlePosition = 1440,
                             double rightRotation = 0, 
                             double leftRotation = 0,
                             double wheelRotation = 0,
@@ -21,8 +21,8 @@ namespace RoadTrain.Classes
                             double leverLength = 150)
         {
             _width = width;
-            _angleRotation = angleRotation;
-            _axelPosition = axelPosition;
+            AngleRotation = angleRotation;
+            _axlePosition = axlePosition;
             _rightRotation = rightRotation;
             _leftRotation = leftRotation;
             _wheelRotation = wheelRotation;
