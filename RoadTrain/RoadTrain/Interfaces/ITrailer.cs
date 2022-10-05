@@ -6,6 +6,6 @@ namespace RoadTrain.Interfaces
     public interface ITrailer : IBody
     {
         List<TrailerAxle> TrailerAxles {get; set;}
-        Point[] Coordinates();
+        (double X, double Y)[] Coordinates { get; }
     }
 }

@@ -12,6 +12,7 @@ namespace RoadTrain.Classes
         public Truck(double width = 2550,
                      double lenght = 1440 + 3600 + 1080,
                      double angleRotation = 0,
+                     double fiveWheelPosition = 1440 + 3600 - 150,
                      SteeringAxle? steeringAxle = default(SteeringAxle),
                      List<DrivingAxle>? drivingAxles = default(List<DrivingAxle>)
                      )
@@ -19,7 +20,8 @@ namespace RoadTrain.Classes
             _width = width;
             _lenght = lenght;
             AngleRotation = angleRotation;
-            if(steeringAxle == default(SteeringAxle))
+            _fiveWheelPosition = fiveWheelPosition;
+            if (steeringAxle == default(SteeringAxle))
             {
                 _steeringAxle = new SteeringAxle(1800, angleRotation, 1440);
             }
@@ -48,14 +50,27 @@ namespace RoadTrain.Classes
 
         public SteeringAxle SteeringAxle
         {
-            get { return _steeringAxle; }
-            set { _steeringAxle = value; }
+            get 
+            { 
+                return _steeringAxle; 
+            }
+            set 
+            { 
+                _steeringAxle = value; 
+            }
         }
 
         public List<DrivingAxle> DrivingAxles 
         {
-            get => _drivingAxles;
-            set => _drivingAxles = value;
+            get
+            {
+                return _drivingAxles;
+            }
+
+            set
+            {
+                _drivingAxles = value;
+            }
         }
 
         public (double X, double Y)[] Coordinates
@@ -77,7 +92,7 @@ namespace RoadTrain.Classes
             }
         }
 
-        public (double X, double Y) SteeringAxleCoordinates
+        public (double X, double Y) SteeringAxleCoordinate
         {
             get
             {
@@ -99,10 +114,19 @@ namespace RoadTrain.Classes
                 return rezult;
             }
         }
+        public (double X, double Y) FiveWheelCoordinate
+        {
+            get
+            {
+                return ((_avgDrivingAxlesPosition - _fiveWheelPosition) * _cosAngleRotation,
+                        (_avgDrivingAxlesPosition - _fiveWheelPosition) * _sinAngleRotation);
+            }
+        }
 
         public double AvgDrivingAxlesPosition
         {
             get { return _avgDrivingAxlesPosition; }
         }
+       
     }
 }

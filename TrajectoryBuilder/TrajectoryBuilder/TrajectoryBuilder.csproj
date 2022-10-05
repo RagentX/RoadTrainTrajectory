@@ -1,18 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="RoadTrain">
       <HintPath>..\..\RoadTrain\RoadTrain\bin\Debug\net6.0\RoadTrain.dll</HintPath>
-    </Reference>
-    <Reference Include="TrajectoryBuilder">
-      <HintPath>..\..\TrajectoryBuilder\TrajectoryBuilder\bin\Debug\net6.0\TrajectoryBuilder.dll</HintPath>
     </Reference>
   </ItemGroup>
 

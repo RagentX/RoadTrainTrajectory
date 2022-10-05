@@ -26,5 +26,19 @@ namespace RoadTrain.Classes
                 _angleRotation = value; 
             } 
         }
+        public double SinAngleRotation
+        {
+            get
+            {
+                return _sinAngleRotation;
+            }
+        }
+        public double CosAngleRotation
+        {
+            get 
+            {
+                return _cosAngleRotation; 
+            }
+        }
     }
 }

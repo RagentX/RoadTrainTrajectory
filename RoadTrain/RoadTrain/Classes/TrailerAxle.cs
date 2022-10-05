@@ -15,9 +15,12 @@ namespace RoadTrain.Classes
         }
 
 
-        public Point[] Coordinates()
+        public (double X, double Y)[] Coordinates
         {
-            return new Point[2];
+            get
+            {
+                return new (double X, double Y)[] { };
+            }
         }
     }
 }

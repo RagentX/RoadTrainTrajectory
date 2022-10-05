@@ -11,11 +11,13 @@ namespace RoadTrain.Classes
         public Trailer(double width = 2550,
                        double lenght = 13600,
                        double angleRotation = 0,
+                       double fiveWheelPosition = 1000,
                        List<TrailerAxle>? trailerAxles = default(List<TrailerAxle>))
         {
             _width = width;
             _lenght = lenght;
             AngleRotation = angleRotation;
+            _fiveWheelPosition = fiveWheelPosition;
             if (trailerAxles == default(List<TrailerAxle>))
             {
                 _trailerAxles = new List<TrailerAxle>()
@@ -44,10 +46,24 @@ namespace RoadTrain.Classes
             set { _trailerAxles = value; }
         }
 
-        public Point[] Coordinates()
+        public (double X, double Y)[] Coordinates
         {
-            return new Point[2];
-        } 
+            get
+            {
+                return new (double X, double Y)[]
+                {
+                    (_fiveWheelPosition * _cosAngleRotation + _width / 2 * _sinAngleRotation,
+                    _fiveWheelPosition * _sinAngleRotation - _width / 2 * _cosAngleRotation),
+                    (_fiveWheelPosition * _cosAngleRotation - _width / 2 * _sinAngleRotation,
+                    _fiveWheelPosition * _sinAngleRotation + _width / 2 * _cosAngleRotation),
+                    (-((_lenght - _fiveWheelPosition) * _cosAngleRotation) - _width / 2 * _sinAngleRotation,
+                    -((_lenght - _fiveWheelPosition) * _sinAngleRotation) + _width / 2 * _cosAngleRotation),
+                    (-((_lenght - _fiveWheelPosition) * _cosAngleRotation) + _width / 2 * _sinAngleRotation,
+                    -((_lenght - _fiveWheelPosition) * _sinAngleRotation) - _width / 2 * _cosAngleRotation)
+
+                };
+            }
+        }
 
         public double AvgTrailerAxlesPosition
         {

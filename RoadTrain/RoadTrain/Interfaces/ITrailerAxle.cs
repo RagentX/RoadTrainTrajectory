@@ -4,6 +4,6 @@ namespace RoadTrain.Interfaces
 {
     public interface ITrailerAxle : IAxle
     {
-        Point[] Coordinates();
+        (double X, double Y)[] Coordinates { get; }
     }
 }
