@@ -56,7 +56,13 @@ namespace RoadTrain.Classes
                     _leftRotation = value * -1;
                     _rightRotation = value * _ackermanAngle;
                 }
-                _wheelRotation = value;
+                if (value < Math.PI / 180 * 32 && -value < Math.PI / 180 * 32)
+                    _wheelRotation = value;
+                else
+                    if (value < 0)
+                        _wheelRotation = -Math.PI / 180 * 32;
+                    else
+                        _wheelRotation = Math.PI / 180 * 32;
             }
             get{ return _wheelRotation; }
         }

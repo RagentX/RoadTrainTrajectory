@@ -9,7 +9,7 @@ namespace TrajectoryBuilder.ObjectsOnTheMap
 {
     public interface IRoadTrainModelOnTheMap : IObjectOnTheMap
     {
-        RoadTrainModel RoadTrainModel { get; set; }
+        RoadTrain.Classes.RoadTrainModel RoadTrainModel { get; set; }
         void RidingForward();
     }
 }
