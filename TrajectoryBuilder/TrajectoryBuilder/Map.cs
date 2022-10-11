@@ -155,6 +155,7 @@ namespace TrajectoryBuilder
             (double X, double Y)[] trailerCoordinates = roadTrainModelCoordinates.TrailerCoordinates;
             double minLenghtMain = double.MaxValue;
             (double X, double Y) fiveWheelCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.FiveWheelCoordinate;
+            
             foreach (LidarPoint point in _lidarPoints)
             {
                 //Расчет расстояния до точки по отношению к тягачу
@@ -162,31 +163,30 @@ namespace TrajectoryBuilder
                 (double X, double Y) pointBackTruck = ((truckCoordinates[2].X + truckCoordinates[3].X) / 2, (truckCoordinates[2].Y + truckCoordinates[3].Y) / 2);
                 (double X, double Y) pointRightSideTruck = ((truckCoordinates[0].X + truckCoordinates[3].X) / 2, (truckCoordinates[0].Y + truckCoordinates[3].Y) / 2);
                 (double X, double Y) pointLeftSideTruck = ((truckCoordinates[1].X + truckCoordinates[2].X) / 2, (truckCoordinates[1].Y + truckCoordinates[2].Y) / 2);
+                
+                //Расчет расстояния от точки до борта тягача
+                double fromFrontToPointTruckFlank = calculateDistance(pointFrontTruck, (point.X, point.Y));
+                double fromBackToPointTruckFlank = calculateDistance(pointBackTruck, (point.X, point.Y));
 
-                double fromFrontToPointTruckFlank = Math.Sqrt((pointFrontTruck.X - point.X) * (pointFrontTruck.X - point.X) + (pointFrontTruck.Y - point.Y) * (pointFrontTruck.Y - point.Y));
-                double fromBackToPointTruckFlank = Math.Sqrt((pointBackTruck.X - point.X) * (pointBackTruck.X - point.X) + (pointBackTruck.Y - point.Y) * (pointBackTruck.Y - point.Y));
+                double distanceToPointTruckFlank =
+                    calculateHeightOfTriangle(
+                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght,
+                        sideB: fromFrontToPointTruckFlank,
+                        sideC: fromBackToPointTruckFlank) -
+                    _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width / 2;
 
-                double triangleHalfPerimeterTruckFlank = (fromFrontToPointTruckFlank + fromBackToPointTruckFlank + _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght) / 2;
-                double triangleAreaTruckFlank = Math.Sqrt(
-                    triangleHalfPerimeterTruckFlank * 
-                    (triangleHalfPerimeterTruckFlank - fromFrontToPointTruckFlank) * 
-                    (triangleHalfPerimeterTruckFlank - fromBackToPointTruckFlank) * 
-                    (triangleHalfPerimeterTruckFlank - _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght));
-                    
-                double distanceToPointTruckFlank = (2 * triangleAreaTruckFlank / _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght) - _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width / 2;
+                //Расчет расстояния от точки до передней или задней части тягача
+                double fromRightSideToPointTruckFrontBack = calculateDistance(pointRightSideTruck, (point.X, point.Y));
+                double fromLeftSideToPointTruckFrontBack = calculateDistance(pointLeftSideTruck, (point.X, point.Y));
 
-                double fromRightSideToPointTruckFrontBack = Math.Sqrt((pointRightSideTruck.X - point.X) * (pointRightSideTruck.X - point.X) + (pointRightSideTruck.Y - point.Y) * (pointRightSideTruck.Y - point.Y));
-                double fromLeftSideToPointTruckFrontBack = Math.Sqrt((pointLeftSideTruck.X - point.X) * (pointLeftSideTruck.X - point.X) + (pointLeftSideTruck.Y - point.Y) * (pointLeftSideTruck.Y - point.Y));
+                double distanceToPointTruckFrontBack =
+                    calculateHeightOfTriangle(
+                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width,
+                        sideB: fromRightSideToPointTruckFrontBack,
+                        sideC: fromLeftSideToPointTruckFrontBack) -
+                    _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght / 2;
 
-                double triangleHalfPerimeterTruckFrontBack = (fromRightSideToPointTruckFrontBack + fromLeftSideToPointTruckFrontBack + _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width) / 2;
-                double triangleAreaTruckFrontBack = Math.Sqrt(
-                    triangleHalfPerimeterTruckFrontBack * 
-                    (triangleHalfPerimeterTruckFrontBack - fromRightSideToPointTruckFrontBack) * 
-                    (triangleHalfPerimeterTruckFrontBack - fromLeftSideToPointTruckFrontBack) * 
-                    (triangleHalfPerimeterTruckFrontBack - _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width));
-                    
-                double distanceToPointTruckFrontBack = (2 * triangleAreaTruckFrontBack / _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width) - _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght / 2;
-
+                //Определяем где находится точка относительно тягача, спереди/сзади или сбоку
                 double minLenghtTruck = double.MaxValue;
 
                 if (distanceToPointTruckFlank > 0 && distanceToPointTruckFrontBack > 0)
@@ -221,33 +221,32 @@ namespace TrajectoryBuilder
                 (double X, double Y) pointRightSideTrailer = ((trailerCoordinates[0].X + trailerCoordinates[3].X) / 2, (trailerCoordinates[0].Y + trailerCoordinates[3].Y) / 2);
                 (double X, double Y) pointLeftSideTrailer = ((trailerCoordinates[1].X + trailerCoordinates[2].X) / 2, (trailerCoordinates[1].Y + trailerCoordinates[2].Y) / 2);
 
-                double fromFrontToPointTrailerFlank = Math.Sqrt((pointFrontTrailer.X - point.X) * (pointFrontTrailer.X - point.X) + (pointFrontTrailer.Y - point.Y) * (pointFrontTrailer.Y - point.Y));
-                double fromBackToPointTrailerFlank = Math.Sqrt((pointBackTrailer.X - point.X) * (pointBackTrailer.X - point.X) + (pointBackTrailer.Y - point.Y) * (pointBackTrailer.Y - point.Y));
+                //Расчет расстояния от точки до борта прицепа
+                double fromFrontToPointTrailerFlank = calculateDistance(pointFrontTrailer, (point.X, point.Y));
+                double fromBackToPointTrailerFlank = calculateDistance(pointBackTrailer, (point.X, point.Y));
 
-                double triangleHalfPerimeterTrailerFlank = (fromFrontToPointTrailerFlank + fromBackToPointTrailerFlank + _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght) / 2;
-                double triangleAreaTrailerFlank = Math.Sqrt(
-                    triangleHalfPerimeterTrailerFlank *
-                    (triangleHalfPerimeterTrailerFlank - fromFrontToPointTrailerFlank) *
-                    (triangleHalfPerimeterTrailerFlank - fromBackToPointTrailerFlank) *
-                    (triangleHalfPerimeterTrailerFlank - _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght));
+                double distanceToPointTrailerFlank = 
+                    calculateHeightOfTriangle(
+                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght, 
+                        sideB: fromFrontToPointTrailerFlank, 
+                        sideC: fromBackToPointTrailerFlank) - 
+                    _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width / 2;
 
-                double distanceToPointTrailerFlank = (2 * triangleAreaTrailerFlank / _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght) - _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width / 2;
+                //Расчет расстояния от точки до передней или задней части тягача
+                double fromRightSideToPointTrailerFrontBack = calculateDistance(pointRightSideTrailer, (point.X, point.Y));
+                double fromLeftSideToPointTrailerFrontBack = calculateDistance(pointLeftSideTrailer, (point.X, point.Y));
+
+                double distanceToPointTrailerFrontBack =
+                    calculateHeightOfTriangle(
+                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width,
+                        sideB: fromRightSideToPointTrailerFrontBack,
+                        sideC: fromLeftSideToPointTrailerFrontBack) -
+                    _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght / 2;
 
 
-
-                double fromRightSideToPointTrailerFrontBack = Math.Sqrt((pointRightSideTrailer.X - point.X) * (pointRightSideTrailer.X - point.X) + (pointRightSideTrailer.Y - point.Y) * (pointRightSideTrailer.Y - point.Y));
-                double fromLeftSideToPointTrailerFrontBack = Math.Sqrt((pointLeftSideTrailer.X - point.X) * (pointLeftSideTrailer.X - point.X) + (pointLeftSideTrailer.Y - point.Y) * (pointLeftSideTrailer.Y - point.Y));
-
-                double triangleHalfPerimeterTrailerFrontBack = (fromRightSideToPointTrailerFrontBack + fromLeftSideToPointTrailerFrontBack + _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width) / 2;
-                double triangleAreaTrailerFrontBack = Math.Sqrt(
-                    triangleHalfPerimeterTrailerFrontBack *
-                    (triangleHalfPerimeterTrailerFrontBack - fromRightSideToPointTrailerFrontBack) *
-                    (triangleHalfPerimeterTrailerFrontBack - fromLeftSideToPointTrailerFrontBack) *
-                    (triangleHalfPerimeterTrailerFrontBack - _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width));
-
-                double distanceToPointTrailerFrontBack = (2 * triangleAreaTrailerFrontBack / _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width) - _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght / 2;
-
+                //Определяем где находится точка относительно прицепа, спереди/сзади или сбоку
                 double minLenghtTrailer = double.MaxValue;
+
                 if (distanceToPointTrailerFlank > 0 && distanceToPointTrailerFrontBack > 0)
                 {
                     double minLenght = double.MaxValue;
@@ -272,6 +271,8 @@ namespace TrajectoryBuilder
                         minLenghtTrailer = distanceToPointTrailerFlank;
                     }
                 }
+
+                //Определяем к какой части автопоезда ближе точка
                 if (minLenghtMain > minLenghtTrailer)
                 {
                     minLenghtMain = minLenghtTrailer;
@@ -282,6 +283,23 @@ namespace TrajectoryBuilder
                 }
             }
             return minLenghtMain;
+        }
+
+        private double calculateHeightOfTriangle(double sideA, double sideB, double sideC) 
+        {
+            double triangleHalfPerimeter = (sideA + sideB + sideC) / 2;
+            double triangleArea = Math.Sqrt(
+                triangleHalfPerimeter *
+                (triangleHalfPerimeter - sideA) *
+                (triangleHalfPerimeter - sideB) *
+                (triangleHalfPerimeter - sideC));
+
+            return 2 * triangleArea / sideA;
+        }
+
+        private double calculateDistance((double X, double Y) pointA, (double X, double Y) pointB) 
+        {
+            return Math.Sqrt((pointA.X - pointB.X) * (pointA.X - pointB.X) + (pointA.Y - pointB.Y) * (pointA.Y - pointB.Y));
         }
     }
 }
