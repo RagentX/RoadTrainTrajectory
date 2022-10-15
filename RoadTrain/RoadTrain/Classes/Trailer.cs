@@ -7,7 +7,21 @@ namespace RoadTrain.Classes
     {
         private List<TrailerAxle>? _trailerAxles;
         private double _avgTrailerAxlesPosition;
-
+        public Trailer(Trailer previousTrailer)
+        {
+            _width = previousTrailer._width;
+            _lenght = previousTrailer._lenght;
+            AngleRotation = previousTrailer._angleRotation;
+            _fiveWheelPosition = previousTrailer._fiveWheelPosition;
+                        double sumTrailerAxlesPosition = 0;
+            foreach(TrailerAxle trailerAxle in previousTrailer._trailerAxles)
+            {
+                _trailerAxles.Add(new TrailerAxle(trailerAxle));
+                sumTrailerAxlesPosition += trailerAxle.AxlePosition;
+            }
+            _avgTrailerAxlesPosition = sumTrailerAxlesPosition / _trailerAxles.Count;
+            //_trailerAxles = trailerAxles;
+        }
         public Trailer(double width = 2550,
                        double lenght = 13600,
                        double angleRotation = 0,
@@ -29,7 +43,10 @@ namespace RoadTrain.Classes
             }
             else
             {
-                _trailerAxles = trailerAxles;
+                foreach (TrailerAxle trailerAxle in trailerAxles)
+                {
+                    _trailerAxles.Add(new TrailerAxle(trailerAxle));
+                }
             }
             double sumTrailerAxlesPosition = 0;
             foreach (TrailerAxle trailerAxle in _trailerAxles)

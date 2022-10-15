@@ -1,6 +1,8 @@
 ﻿using TrajectoryBuilder.ObjectsOnTheMap;
 using RoadTrain.Classes;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
 
 namespace TrajectoryBuilder
 {
@@ -59,85 +61,67 @@ namespace TrajectoryBuilder
                 _lidarPoints = value;
             }
         }
-        public RoadTrainModelCoordinates RoadTrainModelCoordinates
+        public RoadTrainModelCoordinates RoadTrainModelCoordinates(RoadTrainModelOnTheMap roadTrainModelOnTheMap)
         {
-            get
-            {
-
-                (double X, double Y)[] truckCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.Coordinates;
-                (double X, double Y)[] trailerCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Coordinates;
-                (double X, double Y) fiveWheelCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.FiveWheelCoordinate;
-                (double X, double Y) steeringAxleCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxleCoordinate;
-                /*
-                (double X, double Y)[] calculatedTruckCoordinates = new (double X, double Y)[truckCoordinates.Length];
-                (double X, double Y)[] calculatedTrailerCoordinates = new (double X, double Y)[trailerCoordinates.Length];
-                
-                for (int i = 0; i < truckCoordinates.Length; i++)
+            (double X, double Y)[] truckCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Truck.Coordinates;
+            (double X, double Y)[] trailerCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Trailer.Coordinates;
+            (double X, double Y) fiveWheelCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Truck.FiveWheelCoordinate;
+            (double X, double Y) steeringAxleCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxleCoordinate;
+            return new RoadTrainModelCoordinates
+                (
+                new (double X, double Y)[] 
                 {
-                    calculatedTruckCoordinates[i] = (_roadTrainModelOnTheMap.X / _ratio + truckCoordinates[i].X / _ratio, _roadTrainModelOnTheMap.Y / _ratio + truckCoordinates[i].Y / _ratio);
-                    calculatedTrailerCoordinates[i] = ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[i].X) / _ratio, (_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[i].Y) / _ratio);
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[0].X) / _ratio, (-roadTrainModelOnTheMap.Y + truckCoordinates[0].Y) / _ratio),
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[1].X) / _ratio, (-roadTrainModelOnTheMap.Y + truckCoordinates[1].Y) / _ratio),
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[2].X) / _ratio, (-roadTrainModelOnTheMap.Y + truckCoordinates[2].Y) / _ratio),
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[3].X) / _ratio, (-roadTrainModelOnTheMap.Y + truckCoordinates[3].Y) / _ratio)
+                },
+                new (double X, double Y)[]
+                {
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[0].X) / _ratio, (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[0].Y) / _ratio),
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[1].X) / _ratio, (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[1].Y) / _ratio),
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[2].X) / _ratio, (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[2].Y) / _ratio),
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[3].X) / _ratio, (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[3].Y) / _ratio)
+                },
+                new (double X, double Y)[] 
+                { 
+                    ((roadTrainModelOnTheMap.X + steeringAxleCoordinates.X + 800 * Math.Cos(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio,
+                    (-roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y + 800 * Math.Sin(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio),
+                    ((roadTrainModelOnTheMap.X + steeringAxleCoordinates.X - 800 * Math.Cos(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio,
+                    (-roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y - 800 * Math.Sin(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio)
                 }
-                */
-                return new RoadTrainModelCoordinates
-                    (
-                    new (double X, double Y)[] 
-                    {
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[0].X) / _ratio, (-_roadTrainModelOnTheMap.Y + truckCoordinates[0].Y) / _ratio),
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[1].X) / _ratio, (-_roadTrainModelOnTheMap.Y + truckCoordinates[1].Y) / _ratio),
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[2].X) / _ratio, (-_roadTrainModelOnTheMap.Y + truckCoordinates[2].Y) / _ratio),
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[3].X) / _ratio, (-_roadTrainModelOnTheMap.Y + truckCoordinates[3].Y) / _ratio)
-                    },
-                    new (double X, double Y)[]
-                    {
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[0].X) / _ratio, (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[0].Y) / _ratio),
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[1].X) / _ratio, (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[1].Y) / _ratio),
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[2].X) / _ratio, (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[2].Y) / _ratio),
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[3].X) / _ratio, (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[3].Y) / _ratio)
-                    },
-                    new (double X, double Y)[] 
-                    { 
-                        ((_roadTrainModelOnTheMap.X + steeringAxleCoordinates.X + 800 * Math.Cos(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio,
-                        (-_roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y + 800 * Math.Sin(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio),
-                        ((_roadTrainModelOnTheMap.X + steeringAxleCoordinates.X - 800 * Math.Cos(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio,
-                        (-_roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y - 800 * Math.Sin(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)) / _ratio)
-                    }
-                    );
-            }
+                );
         }
-        public RoadTrainModelCoordinates RoadTrainModelCoordinatesNoRatio
+        public RoadTrainModelCoordinates RoadTrainModelCoordinatesNoRatio(RoadTrainModelOnTheMap roadTrainModelOnTheMap)
         {
-            get
-            {
-
-                (double X, double Y)[] truckCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.Coordinates;
-                (double X, double Y)[] trailerCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Coordinates;
-                (double X, double Y) fiveWheelCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.FiveWheelCoordinate;
-                (double X, double Y) steeringAxleCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxleCoordinate;
-                return new RoadTrainModelCoordinates
-                    (
-                    new (double X, double Y)[]
-                    {
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[0].X), (-_roadTrainModelOnTheMap.Y + truckCoordinates[0].Y)),
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[1].X), (-_roadTrainModelOnTheMap.Y + truckCoordinates[1].Y)),
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[2].X), (-_roadTrainModelOnTheMap.Y + truckCoordinates[2].Y)),
-                        ((_roadTrainModelOnTheMap.X + truckCoordinates[3].X), (-_roadTrainModelOnTheMap.Y + truckCoordinates[3].Y))
-                    },
-                    new (double X, double Y)[]
-                    {
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[0].X), (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[0].Y)),
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[1].X), (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[1].Y)),
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[2].X), (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[2].Y)),
-                        ((_roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[3].X), (-_roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[3].Y))
-                    },
-                    new (double X, double Y)[]
-                    {
-                        ((_roadTrainModelOnTheMap.X + steeringAxleCoordinates.X + 800 * Math.Cos(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)),
-                        (-_roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y + 800 * Math.Sin(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation))),
-                        ((_roadTrainModelOnTheMap.X + steeringAxleCoordinates.X - 800 * Math.Cos(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)),
-                        (-_roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y - 800 * Math.Sin(_roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + _roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)))
-                    }
-                    );
-            }
+            (double X, double Y)[] truckCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Truck.Coordinates;
+            (double X, double Y)[] trailerCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Trailer.Coordinates;
+            (double X, double Y) fiveWheelCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Truck.FiveWheelCoordinate;
+            (double X, double Y) steeringAxleCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxleCoordinate;
+            return new RoadTrainModelCoordinates
+                (
+                new (double X, double Y)[]
+                {
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[0].X), (-roadTrainModelOnTheMap.Y + truckCoordinates[0].Y)),
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[1].X), (-roadTrainModelOnTheMap.Y + truckCoordinates[1].Y)),
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[2].X), (-roadTrainModelOnTheMap.Y + truckCoordinates[2].Y)),
+                    ((roadTrainModelOnTheMap.X + truckCoordinates[3].X), (-roadTrainModelOnTheMap.Y + truckCoordinates[3].Y))
+                },
+                new (double X, double Y)[]
+                {
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[0].X), (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[0].Y)),
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[1].X), (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[1].Y)),
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[2].X), (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[2].Y)),
+                    ((roadTrainModelOnTheMap.X + fiveWheelCoordinates.X + trailerCoordinates[3].X), (-roadTrainModelOnTheMap.Y + fiveWheelCoordinates.Y + trailerCoordinates[3].Y))
+                },
+                new (double X, double Y)[]
+                {
+                    ((roadTrainModelOnTheMap.X + steeringAxleCoordinates.X + 800 * Math.Cos(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)),
+                    (-roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y + 800 * Math.Sin(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation))),
+                    ((roadTrainModelOnTheMap.X + steeringAxleCoordinates.X - 800 * Math.Cos(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)),
+                    (-roadTrainModelOnTheMap.Y + steeringAxleCoordinates.Y - 800 * Math.Sin(roadTrainModelOnTheMap.RoadTrainModel.Truck.AngleRotation + roadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation)))
+                }
+                );
         }
         public void AddPoint(double x, double y)
         {
@@ -148,13 +132,13 @@ namespace TrajectoryBuilder
         {
             _lidarPoints.Remove(point);
         }
-        public double SearchNearestPoint()
+        public double SearchNearestPoint(RoadTrainModelOnTheMap roadTrainModelOnTheMap)
         {
-            RoadTrainModelCoordinates roadTrainModelCoordinates = RoadTrainModelCoordinatesNoRatio;
+            RoadTrainModelCoordinates roadTrainModelCoordinates = RoadTrainModelCoordinatesNoRatio(roadTrainModelOnTheMap);
             (double X, double Y)[] truckCoordinates = roadTrainModelCoordinates.TruckCoordinates;
             (double X, double Y)[] trailerCoordinates = roadTrainModelCoordinates.TrailerCoordinates;
             double minLenghtMain = double.MaxValue;
-            (double X, double Y) fiveWheelCoordinates = _roadTrainModelOnTheMap.RoadTrainModel.Truck.FiveWheelCoordinate;
+            (double X, double Y) fiveWheelCoordinates = roadTrainModelOnTheMap.RoadTrainModel.Truck.FiveWheelCoordinate;
             
             foreach (LidarPoint point in _lidarPoints)
             {
@@ -165,26 +149,26 @@ namespace TrajectoryBuilder
                 (double X, double Y) pointLeftSideTruck = ((truckCoordinates[1].X + truckCoordinates[2].X) / 2, (truckCoordinates[1].Y + truckCoordinates[2].Y) / 2);
                 
                 //Расчет расстояния от точки до борта тягача
-                double fromFrontToPointTruckFlank = calculateDistance(pointFrontTruck, (point.X, point.Y));
-                double fromBackToPointTruckFlank = calculateDistance(pointBackTruck, (point.X, point.Y));
+                double fromFrontToPointTruckFlank = CalculateDistance(pointFrontTruck, (point.X, point.Y));
+                double fromBackToPointTruckFlank = CalculateDistance(pointBackTruck, (point.X, point.Y));
 
                 double distanceToPointTruckFlank =
-                    calculateHeightOfTriangle(
-                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght,
+                    CalculateHeightOfTriangle(
+                        sideA: roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght,
                         sideB: fromFrontToPointTruckFlank,
                         sideC: fromBackToPointTruckFlank) -
-                    _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width / 2;
+                    roadTrainModelOnTheMap.RoadTrainModel.Truck.Width / 2;
 
                 //Расчет расстояния от точки до передней или задней части тягача
-                double fromRightSideToPointTruckFrontBack = calculateDistance(pointRightSideTruck, (point.X, point.Y));
-                double fromLeftSideToPointTruckFrontBack = calculateDistance(pointLeftSideTruck, (point.X, point.Y));
+                double fromRightSideToPointTruckFrontBack = CalculateDistance(pointRightSideTruck, (point.X, point.Y));
+                double fromLeftSideToPointTruckFrontBack = CalculateDistance(pointLeftSideTruck, (point.X, point.Y));
 
                 double distanceToPointTruckFrontBack =
-                    calculateHeightOfTriangle(
-                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Truck.Width,
+                    CalculateHeightOfTriangle(
+                        sideA: roadTrainModelOnTheMap.RoadTrainModel.Truck.Width,
                         sideB: fromRightSideToPointTruckFrontBack,
                         sideC: fromLeftSideToPointTruckFrontBack) -
-                    _roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght / 2;
+                    roadTrainModelOnTheMap.RoadTrainModel.Truck.Lenght / 2;
 
                 //Определяем где находится точка относительно тягача, спереди/сзади или сбоку
                 double minLenghtTruck = double.MaxValue;
@@ -222,26 +206,26 @@ namespace TrajectoryBuilder
                 (double X, double Y) pointLeftSideTrailer = ((trailerCoordinates[1].X + trailerCoordinates[2].X) / 2, (trailerCoordinates[1].Y + trailerCoordinates[2].Y) / 2);
 
                 //Расчет расстояния от точки до борта прицепа
-                double fromFrontToPointTrailerFlank = calculateDistance(pointFrontTrailer, (point.X, point.Y));
-                double fromBackToPointTrailerFlank = calculateDistance(pointBackTrailer, (point.X, point.Y));
+                double fromFrontToPointTrailerFlank = CalculateDistance(pointFrontTrailer, (point.X, point.Y));
+                double fromBackToPointTrailerFlank = CalculateDistance(pointBackTrailer, (point.X, point.Y));
 
                 double distanceToPointTrailerFlank = 
-                    calculateHeightOfTriangle(
-                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght, 
+                    CalculateHeightOfTriangle(
+                        sideA: roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght, 
                         sideB: fromFrontToPointTrailerFlank, 
                         sideC: fromBackToPointTrailerFlank) - 
-                    _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width / 2;
+                    roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width / 2;
 
                 //Расчет расстояния от точки до передней или задней части тягача
-                double fromRightSideToPointTrailerFrontBack = calculateDistance(pointRightSideTrailer, (point.X, point.Y));
-                double fromLeftSideToPointTrailerFrontBack = calculateDistance(pointLeftSideTrailer, (point.X, point.Y));
+                double fromRightSideToPointTrailerFrontBack = CalculateDistance(pointRightSideTrailer, (point.X, point.Y));
+                double fromLeftSideToPointTrailerFrontBack = CalculateDistance(pointLeftSideTrailer, (point.X, point.Y));
 
                 double distanceToPointTrailerFrontBack =
-                    calculateHeightOfTriangle(
-                        sideA: _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width,
+                    CalculateHeightOfTriangle(
+                        sideA: roadTrainModelOnTheMap.RoadTrainModel.Trailer.Width,
                         sideB: fromRightSideToPointTrailerFrontBack,
                         sideC: fromLeftSideToPointTrailerFrontBack) -
-                    _roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght / 2;
+                    roadTrainModelOnTheMap.RoadTrainModel.Trailer.Lenght / 2;
 
 
                 //Определяем где находится точка относительно прицепа, спереди/сзади или сбоку
@@ -285,7 +269,8 @@ namespace TrajectoryBuilder
             return minLenghtMain;
         }
 
-        private double calculateHeightOfTriangle(double sideA, double sideB, double sideC) 
+        //Вычисление высоты треугольника, проведенного от угла к стороне А (sideA)
+        private double CalculateHeightOfTriangle(double sideA, double sideB, double sideC) 
         {
             double triangleHalfPerimeter = (sideA + sideB + sideC) / 2;
             double triangleArea = Math.Sqrt(
@@ -297,9 +282,71 @@ namespace TrajectoryBuilder
             return 2 * triangleArea / sideA;
         }
 
-        private double calculateDistance((double X, double Y) pointA, (double X, double Y) pointB) 
+        private double CalculateDistance((double X, double Y) pointA, (double X, double Y) pointB) 
         {
             return Math.Sqrt((pointA.X - pointB.X) * (pointA.X - pointB.X) + (pointA.Y - pointB.Y) * (pointA.Y - pointB.Y));
+        }
+
+
+        public List<double> TrajectoryBuild(RoadTrainModelOnTheMap roadTrainModelOnTheMapFin)
+        {
+            List<double> уголПоворотаРуляНаКаждойИзСтадии = new List<double>();
+            RoadTrainModelCoordinates StrartCoordinatesRoadTrainModelOnTheMapFin = RoadTrainModelCoordinatesNoRatio(roadTrainModelOnTheMapFin);
+            RoadTrainModelCoordinates CoordinatesRoadTrainModelOnTheMap = RoadTrainModelCoordinatesNoRatio(roadTrainModelOnTheMapFin);
+            double roadTrainLenght = roadTrainModelOnTheMapFin.RoadTrainModel.Trailer.Lenght - roadTrainModelOnTheMapFin.RoadTrainModel.Trailer.FiveWheelPosition +
+                        roadTrainModelOnTheMapFin.RoadTrainModel.Truck.FiveWheelPosition;
+            while
+                (
+                    CalculateHeightOfTriangle
+                        (
+                            roadTrainModelOnTheMapFin.RoadTrainModel.Trailer.Width,
+                            CalculateDistance
+                            (
+                                ((CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].X + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].X) / 2,
+                                (CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].Y + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].Y) / 2),
+                                (StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[2].X, StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[2].Y)
+                            ),
+                            CalculateDistance
+                            (
+                                ((CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].X + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].X) / 2,
+                                (CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].Y + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].Y) / 2),
+                                (StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[3].X, StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[3].Y)
+                            )
+                        ) < roadTrainLenght
+                )
+            {
+                roadTrainModelOnTheMapFin.RoadTrainModel.Truck.SteeringAxle.WheelRotation += 1;
+
+                while
+                (
+                   CalculateHeightOfTriangle
+                       (
+                           roadTrainModelOnTheMapFin.RoadTrainModel.Trailer.Width,
+                           CalculateDistance
+                           (
+                               ((CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].X + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].X) / 2,
+                               (CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].Y + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].Y) / 2),
+                               (StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[2].X, StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[2].Y)
+                           ),
+                           CalculateDistance
+                           (
+                               ((CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].X + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].X) / 2,
+                               (CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[2].Y + CoordinatesRoadTrainModelOnTheMap.TrailerCoordinates[3].Y) / 2),
+                               (StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[3].X, StrartCoordinatesRoadTrainModelOnTheMapFin.TrailerCoordinates[3].Y)
+                           )
+                       ) < roadTrainLenght
+                )
+                {
+
+                }
+
+                    roadTrainModelOnTheMapFin.RidingForward();
+
+                уголПоворотаРуляНаКаждойИзСтадии.Add(roadTrainModelOnTheMapFin.RoadTrainModel.Truck.SteeringAxle.WheelRotation);
+                CoordinatesRoadTrainModelOnTheMap = RoadTrainModelCoordinatesNoRatio(roadTrainModelOnTheMapFin);
+            }
+
+            return уголПоворотаРуляНаКаждойИзСтадии;
         }
     }
 }

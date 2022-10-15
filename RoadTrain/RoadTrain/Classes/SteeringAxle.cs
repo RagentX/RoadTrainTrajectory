@@ -11,6 +11,17 @@ namespace RoadTrain.Classes
         private double _ackermanAngle;
         private double _leverLength;
 
+        public SteeringAxle(SteeringAxle previousSteeringAxle)
+        {
+            _width = previousSteeringAxle._width;
+            AngleRotation = previousSteeringAxle.AngleRotation;
+            _axlePosition = previousSteeringAxle._axlePosition;
+            _rightRotation = previousSteeringAxle._rightRotation;
+            _leftRotation = previousSteeringAxle._leftRotation;
+            WheelRotation = previousSteeringAxle._wheelRotation;
+            _ackermanAngle = previousSteeringAxle._ackermanAngle;
+            _leverLength = previousSteeringAxle._leverLength;
+        }
         public SteeringAxle(double width = 1800,
                             double angleRotation = 0,
                             double axlePosition = 1440,
@@ -25,7 +36,7 @@ namespace RoadTrain.Classes
             _axlePosition = axlePosition;
             _rightRotation = rightRotation;
             _leftRotation = leftRotation;
-            _wheelRotation = wheelRotation;
+            WheelRotation = wheelRotation;
             _ackermanAngle = ackermanAngle;
             _leverLength = leverLength;
         }

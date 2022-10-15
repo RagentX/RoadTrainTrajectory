@@ -6,7 +6,12 @@ namespace RoadTrain.Classes
     {
         private Trailer _trailer;
         private Truck _truck;
+        public RoadTrainModel(RoadTrainModel previousRoadTrainModel)
+        {
+            _truck = new Truck(previousRoadTrainModel._truck);
+            _trailer = new Trailer(previousRoadTrainModel._trailer);
 
+        }
         public RoadTrainModel()
         {
             _truck = new Truck();
@@ -17,13 +22,13 @@ namespace RoadTrain.Classes
         public Trailer Trailer
         {
             get { return _trailer; }
-            set { _trailer = value; }
+            set { _trailer = new Trailer(value); }
         }
 
         public Truck Truck
         {
             get { return _truck; }
-            set { _truck = value; }
+            set { _truck = new Truck(value); }
         }
         public (double X, double Y) RidingForward(double speed)
         {

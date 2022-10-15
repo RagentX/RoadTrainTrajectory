@@ -8,7 +8,21 @@ namespace RoadTrain.Classes
         private SteeringAxle? _steeringAxle;
         private List<DrivingAxle>? _drivingAxles;
         private double _avgDrivingAxlesPosition;
-
+        public Truck(Truck previousTruck)
+        {
+            _width = previousTruck._width;
+            _lenght = previousTruck._lenght;
+            AngleRotation = previousTruck._angleRotation;
+            _fiveWheelPosition = previousTruck._fiveWheelPosition;
+            _steeringAxle = new SteeringAxle(previousTruck._steeringAxle);
+            double sumDrivingAxlesPosition = 0;
+            foreach (DrivingAxle drivingAxle in previousTruck._drivingAxles)
+            {
+                _drivingAxles.Add(new DrivingAxle(drivingAxle));
+                sumDrivingAxlesPosition += drivingAxle.AxlePosition;
+            }
+            _avgDrivingAxlesPosition = sumDrivingAxlesPosition / _drivingAxles.Count;
+        }
         public Truck(double width = 2550,
                      double lenght = 1440 + 3600 + 1080,
                      double angleRotation = 0,
@@ -27,7 +41,7 @@ namespace RoadTrain.Classes
             }
             else
             {
-                _steeringAxle = steeringAxle;
+                _steeringAxle = new SteeringAxle(steeringAxle);
             }
             if(drivingAxles == default(List<DrivingAxle>))
             {
@@ -38,7 +52,10 @@ namespace RoadTrain.Classes
             }
             else
             {
-                _drivingAxles = drivingAxles;
+                foreach (DrivingAxle drivingAxle in drivingAxles)
+                {
+                    _drivingAxles.Add(new DrivingAxle(drivingAxle));
+                }
             }
             double sumDrivingAxlesPosition = 0;
             foreach(DrivingAxle drivingAxle in _drivingAxles)
@@ -56,7 +73,7 @@ namespace RoadTrain.Classes
             }
             set 
             { 
-                _steeringAxle = value; 
+                _steeringAxle = new SteeringAxle(value); 
             }
         }
 
@@ -69,7 +86,11 @@ namespace RoadTrain.Classes
 
             set
             {
-                _drivingAxles = value;
+                _drivingAxles.Clear();
+                foreach(DrivingAxle drivingAxle in value)
+                {
+                    _drivingAxles.Add(new DrivingAxle(drivingAxle));
+                }
             }
         }
 

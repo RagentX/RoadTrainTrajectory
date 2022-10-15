@@ -27,7 +27,6 @@ namespace UItestToadTrain
         int x = 400;
         int y = 500;
         TrajectoryBuilder.Map map = new Map();
-        RoadTrainModel roadTrainModel = new RoadTrainModel();
         Polygon truckBodyPolygon = new Polygon();
         Polygon trailerBodyPolygon = new Polygon();
         Line wheelLine = new Line();
@@ -42,6 +41,7 @@ namespace UItestToadTrain
             grid.Children.Add(trailerBodyPolygon);
             wheelLine.Stroke = Brushes.Blue;
             grid.Children.Add(wheelLine);
+            List<double> a = map.TrajectoryBuilder(map.RoadTrainModelOnTheMap);
             DrawRoadTrain();
             DrawLidarPoints();
         }
@@ -85,31 +85,31 @@ namespace UItestToadTrain
                 map.RoadTrainModelOnTheMap.RoadTrainModel.Truck.SteeringAxle.WheelRotation = 0;
             }
             DrawRoadTrain();
-            pointTextBox.Text = map.SearchNearestPoint().ToString();
+            pointTextBox.Text = map.SearchNearestPoint(map.RoadTrainModelOnTheMap).ToString();
         }
 
         private void DrawRoadTrain()
         {
-            RoadTrainModelCoordinates roadTrainModelCoordinates = map.RoadTrainModelCoordinates;
+            RoadTrainModelCoordinates roadTrainModelCoordinates = map.RoadTrainModelCoordinates(map.RoadTrainModelOnTheMap);
             (double X, double Y)[] truckBodyCoordinates = map.RoadTrainModelOnTheMap.RoadTrainModel.Truck.Coordinates;
             truckBodyPolygon.Points = new PointCollection
             {
-                new Point(x + map.RoadTrainModelCoordinates.TruckCoordinates[0].X, y + map.RoadTrainModelCoordinates.TruckCoordinates[0].Y),
-                new Point(x + map.RoadTrainModelCoordinates.TruckCoordinates[1].X, y + map.RoadTrainModelCoordinates.TruckCoordinates[1].Y),
-                new Point(x + map.RoadTrainModelCoordinates.TruckCoordinates[2].X, y + map.RoadTrainModelCoordinates.TruckCoordinates[2].Y),
-                new Point(x + map.RoadTrainModelCoordinates.TruckCoordinates[3].X, y + map.RoadTrainModelCoordinates.TruckCoordinates[3].Y)
+                new Point(x + roadTrainModelCoordinates.TruckCoordinates[0].X, y + roadTrainModelCoordinates.TruckCoordinates[0].Y),
+                new Point(x + roadTrainModelCoordinates.TruckCoordinates[1].X, y + roadTrainModelCoordinates.TruckCoordinates[1].Y),
+                new Point(x + roadTrainModelCoordinates.TruckCoordinates[2].X, y + roadTrainModelCoordinates.TruckCoordinates[2].Y),
+                new Point(x + roadTrainModelCoordinates.TruckCoordinates[3].X, y + roadTrainModelCoordinates.TruckCoordinates[3].Y)
             };
             trailerBodyPolygon.Points = new PointCollection
             {
-                new Point(x + map.RoadTrainModelCoordinates.TrailerCoordinates[0].X, y + map.RoadTrainModelCoordinates.TrailerCoordinates[0].Y),
-                new Point(x + map.RoadTrainModelCoordinates.TrailerCoordinates[1].X, y + map.RoadTrainModelCoordinates.TrailerCoordinates[1].Y),
-                new Point(x + map.RoadTrainModelCoordinates.TrailerCoordinates[2].X, y + map.RoadTrainModelCoordinates.TrailerCoordinates[2].Y),
-                new Point(x + map.RoadTrainModelCoordinates.TrailerCoordinates[3].X, y + map.RoadTrainModelCoordinates.TrailerCoordinates[3].Y)
+                new Point(x + roadTrainModelCoordinates.TrailerCoordinates[0].X, y + roadTrainModelCoordinates.TrailerCoordinates[0].Y),
+                new Point(x + roadTrainModelCoordinates.TrailerCoordinates[1].X, y + roadTrainModelCoordinates.TrailerCoordinates[1].Y),
+                new Point(x + roadTrainModelCoordinates.TrailerCoordinates[2].X, y + roadTrainModelCoordinates.TrailerCoordinates[2].Y),
+                new Point(x + roadTrainModelCoordinates.TrailerCoordinates[3].X, y + roadTrainModelCoordinates.TrailerCoordinates[3].Y)
             };
-            wheelLine.X1 = x + map.RoadTrainModelCoordinates.TruckSteeringAxleCoordinates[0].X;
-            wheelLine.Y1 = y + map.RoadTrainModelCoordinates.TruckSteeringAxleCoordinates[0].Y;
-            wheelLine.X2 = x + map.RoadTrainModelCoordinates.TruckSteeringAxleCoordinates[1].X;
-            wheelLine.Y2 = y + map.RoadTrainModelCoordinates.TruckSteeringAxleCoordinates[1].Y;
+            wheelLine.X1 = x + roadTrainModelCoordinates.TruckSteeringAxleCoordinates[0].X;
+            wheelLine.Y1 = y + roadTrainModelCoordinates.TruckSteeringAxleCoordinates[0].Y;
+            wheelLine.X2 = x + roadTrainModelCoordinates.TruckSteeringAxleCoordinates[1].X;
+            wheelLine.Y2 = y + roadTrainModelCoordinates.TruckSteeringAxleCoordinates[1].Y;
         }
         private void DrawLidarPoints()
         {
